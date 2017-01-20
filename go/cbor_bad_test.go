@@ -20,7 +20,7 @@ type StateT struct {
 	Msg string
 }
 
-func TestWorksNotWithCBOR(t *testing.T) {
+func TestWorksNot(t *testing.T) {
 	stateToEnc := State(StateT{"hello"})
 	stateToDec := State(StateT{"temp"})
 
@@ -49,18 +49,18 @@ func TestWorksNotWithCBOR(t *testing.T) {
 	t.Log(st.Msg)
 }
 
-func TestWorksWithMsgPack(t *testing.T) {
+func TestWorks(t *testing.T) {
 	stateToEnc := State(StateT{"hello"})
 	stateToDec := State(StateT{"temp"})
 
 	buf := new(bytes.Buffer)
-	enc := codec.NewEncoder(buf, &codec.MsgpackHandle{})
+	enc := codec.NewEncoder(buf, &codec.CborHandle{})
 	err := enc.Encode(stateToEnc)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	dec := codec.NewDecoder(buf, &codec.MsgpackHandle{})
+	dec := codec.NewDecoder(buf, &codec.CborHandle{})
 	err = dec.Decode(&stateToDec)
 	if err != nil {
 		t.Fatal(err)
